@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -10,4 +8,65 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Prioridade {
+  baixa
+  media
+  alta
+
+  @@map("prioridade")
+}
+
+enum Status {
+  aberta
+  analise
+  aprovada
+  rejeitada
+
+  @@map("status")
+}
+
+model Area {
+  id           Int           @id @default(autoincrement())
+  descricao    String
+  solicitacoes Solicitacao[]
+
+  @@map("area")
+}
+
+model Solicitacao {
+  id                String     @id @default(uuid()) @db.Uuid
+  areaSolicitanteId Int        @map("area_solicitante_id")
+  titulo            String
+  descricao         String
+  solicitante       String
+  prioridade        Prioridade
+  status            Status     @default(aberta)
+  dataSolicitacao   DateTime   @default(now()) @map("data_solicitacao")
+  dataAtualizacao   DateTime   @default(now()) @updatedAt @map("data_atualizacao")
+  dataExclusao      DateTime?  @map("data_exclusao")
+
+  area              Area               @relation(fields: [areaSolicitanteId], references: [id], onDelete: Restrict)
+  historicosDecisao HistoricoDecisao[]
+
+  @@index([status])
+  @@index([prioridade])
+  @@index([dataSolicitacao])
+  @@index([areaSolicitanteId])
+  @@map("solicitacao")
+}
+
+model HistoricoDecisao {
+  id                 Int      @id @default(autoincrement())
+  solicitacaoId      String   @map("solicitacao_id") @db.Uuid
+  status             Status
+  comentario         String?
+  responsavelDecisao String   @map("responsavel_decisao")
+  dataDecisao        DateTime @default(now()) @map("data_decisao")
+
+  solicitacao Solicitacao @relation(fields: [solicitacaoId], references: [id], onDelete: Cascade)
+
+  @@index([solicitacaoId])
+  @@map("historico_decisao")
 }
