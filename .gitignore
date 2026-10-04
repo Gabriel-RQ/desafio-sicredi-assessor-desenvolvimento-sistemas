@@ -1,0 +1,52 @@
+# Dependências
+node_modules/
+/.pnp
+.pnp.*
+
+# Build e compilação (NestJS / frontend)
+dist/
+build/
+out/
+.next/
+
+# Prisma - Cliente gerado
+**/src/generated/prisma/
+**/generated/prisma/
+
+# Variáveis de ambiente (ignora segredos, mantém templates)
+.env
+.env.*
+.env.local
+.env.*.local
+!.env.example
+!.env.*.example
+
+# Testes e cobertura
+coverage/
+.nyc_output/
+
+# Caches e TypeScript
+*.tsbuildinfo
+.eslintcache
+.oxlintcache
+.cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*~
