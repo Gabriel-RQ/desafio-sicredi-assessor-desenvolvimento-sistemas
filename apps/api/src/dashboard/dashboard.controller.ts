@@ -1,9 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service.js';
 import { MetricasDashboardDto } from './dto/metricas-dashboard.dto.js';
+import { Perfis } from '../auth/decorators/perfis.decorator.js';
+import { Perfil } from '../generated/prisma/enums.js';
 
+@ApiBearerAuth()
 @ApiTags('dashboard')
+@Perfis(Perfil.gestor)
+@ApiResponse({ status: 401, description: 'Não autenticado' })
+@ApiResponse({ status: 403, description: 'Acesso restrito ao perfil de gestor' })
 @Controller('dashboard')
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}

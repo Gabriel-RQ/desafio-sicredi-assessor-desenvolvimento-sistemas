@@ -16,9 +16,19 @@ async function bootstrap()
     .setTitle('API de Solicitações')
     .setDescription('API para gestão de solicitações internas no Sicredi Conexão')
     .setVersion('1.0')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      description: 'Insira o token JWT gerado no endpoint /auth/login',
+    })
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, documentFactory);
+  SwaggerModule.setup('api/docs', app, documentFactory, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalPipes(

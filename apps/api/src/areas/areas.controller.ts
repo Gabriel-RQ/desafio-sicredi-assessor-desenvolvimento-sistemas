@@ -1,9 +1,11 @@
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AreasService } from './areas.service.js';
 import { AreaResponseDto } from './dto/area-response.dto.js';
 
+@ApiBearerAuth()
 @ApiTags('areas')
+@ApiResponse({ status: 401, description: 'Não autenticado' })
 @Controller('areas')
 export class AreasController {
   constructor(private readonly areasService: AreasService) {}
