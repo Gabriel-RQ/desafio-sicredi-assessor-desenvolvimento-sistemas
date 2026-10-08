@@ -24,12 +24,6 @@ export class CreateSolicitacaoDto {
   @MinLength(5, { message: 'A descrição deve ter no mínimo 5 caracteres.' })
   descricao!: string;
 
-  @ApiProperty({ description: 'Nome do solicitante', maxLength: 100 })
-  @IsString({ message: 'O solicitante deve ser um texto.' })
-  @IsNotEmpty({ message: 'O solicitante é obrigatório.' })
-  @MaxLength(100, { message: 'O nome do solicitante deve ter no máximo 100 caracteres.' })
-  solicitante!: string;
-
   @ApiProperty({ description: 'ID da área solicitante (numérico)' })
   @IsInt({ message: 'O ID da área deve ser um número inteiro.' })
   @IsPositive({ message: 'O ID da área deve ser positivo.' })

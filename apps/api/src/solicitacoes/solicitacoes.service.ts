@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -8,13 +9,23 @@ import { CreateSolicitacaoDto } from './dto/create-solicitacao.dto.js';
 import { UpdateSolicitacaoDto } from './dto/update-solicitacao.dto.js';
 import { DecidirSolicitacaoDto } from './dto/decidir-solicitacao.dto.js';
 import { QuerySolicitacaoDto } from './dto/query-solicitacao.dto.js';
-import { Prisma } from '../generated/prisma/client.js';
+import { Perfil, Prisma } from '../generated/prisma/client.js';
+import { UsuarioAutenticado } from '../auth/types/usuario-autenticado.js';
+import { usuarioPublicoSelect } from '../usuarios/usuarios.service.js';
 
 @Injectable()
 export class SolicitacoesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async criar(createDto: CreateSolicitacaoDto) {
+  private escopoDoUsuario(
+    usuario: UsuarioAutenticado,
+  ): Prisma.SolicitacaoWhereInput {
+    return usuario.perfil === Perfil.gestor
+      ? {}
+      : { solicitanteId: usuario.id };
+  }
+
+  async criar(createDto: CreateSolicitacaoDto, usuario: UsuarioAutenticado) {
     const area = await this.prisma.area.findUnique({
       where: { id: createDto.areaSolicitanteId },
     });
@@ -27,18 +38,21 @@ export class SolicitacoesService {
       data: {
         titulo: createDto.titulo,
         descricao: createDto.descricao,
-        solicitante: createDto.solicitante,
+        solicitanteId: usuario.id,
         areaSolicitanteId: createDto.areaSolicitanteId,
         prioridade: createDto.prioridade,
         status: 'aberta',
       },
       include: {
         area: true,
+        solicitante: {
+          select: usuarioPublicoSelect,
+        },
       },
     });
   }
 
-  async listar(query: QuerySolicitacaoDto) {
+  async listar(query: QuerySolicitacaoDto, usuario: UsuarioAutenticado) {
     const {
       search,
       status,
@@ -52,6 +66,7 @@ export class SolicitacoesService {
 
     const where: Prisma.SolicitacaoWhereInput = {
       dataExclusao: null,
+      ...this.escopoDoUsuario(usuario),
     };
 
     if (status) {
@@ -71,7 +86,11 @@ export class SolicitacoesService {
       where.OR = [
         { titulo: { contains: term, mode: 'insensitive' } },
         { descricao: { contains: term, mode: 'insensitive' } },
-        { solicitante: { contains: term, mode: 'insensitive' } },
+        {
+          solicitante: {
+            nome: { contains: term, mode: 'insensitive' },
+          },
+        },
       ];
     }
 
@@ -88,11 +107,19 @@ export class SolicitacoesService {
         where,
         include: {
           area: true,
+          solicitante: {
+            select: usuarioPublicoSelect,
+          },
           historicosDecisao: {
             orderBy: {
               dataDecisao: 'desc',
             },
             take: 1,
+            include: {
+              responsavel: {
+                select: usuarioPublicoSelect,
+              },
+            },
           },
         },
         orderBy,
@@ -113,17 +140,26 @@ export class SolicitacoesService {
     };
   }
 
-  async buscarPorId(id: string) {
+  async buscarPorId(id: string, usuario: UsuarioAutenticado) {
     const solicitacao = await this.prisma.solicitacao.findFirst({
       where: {
         id,
         dataExclusao: null,
+        ...this.escopoDoUsuario(usuario),
       },
       include: {
         area: true,
+        solicitante: {
+          select: usuarioPublicoSelect,
+        },
         historicosDecisao: {
           orderBy: {
             dataDecisao: 'desc',
+          },
+          include: {
+            responsavel: {
+              select: usuarioPublicoSelect,
+            },
           },
         },
       },
@@ -136,12 +172,22 @@ export class SolicitacoesService {
     return solicitacao;
   }
 
-  async atualizar(id: string, updateDto: UpdateSolicitacaoDto) {
-    const solicitacao = await this.buscarPorId(id);
+  async atualizar(
+    id: string,
+    updateDto: UpdateSolicitacaoDto,
+    usuario: UsuarioAutenticado,
+  ) {
+    if (usuario.perfil === Perfil.gestor) {
+      throw new ForbiddenException(
+        'Gestores não editam solicitações de usuários. Utilize o fluxo de decisão.',
+      );
+    }
 
-    if (solicitacao.status === 'aprovada' || solicitacao.status === 'rejeitada') {
+    const solicitacao = await this.buscarPorId(id, usuario);
+
+    if (solicitacao.status !== 'aberta') {
       throw new BadRequestException(
-        'Solicitações já finalizadas (aprovadas ou rejeitadas) não podem ser alteradas.',
+        'Solicitações já em análise ou finalizadas não podem ser alteradas.',
       );
     }
 
@@ -160,12 +206,29 @@ export class SolicitacoesService {
       data: updateDto,
       include: {
         area: true,
+        solicitante: {
+          select: usuarioPublicoSelect,
+        },
       },
     });
   }
 
-  async decidir(id: string, decidirDto: DecidirSolicitacaoDto) {
-    const solicitacao = await this.buscarPorId(id);
+  async decidir(
+    id: string,
+    decidirDto: DecidirSolicitacaoDto,
+    usuario: UsuarioAutenticado,
+  ) {
+    const solicitacao = await this.prisma.solicitacao.findFirst({
+      where: {
+        id,
+        dataExclusao: null,
+      },
+    });
+
+    if (!solicitacao) {
+      throw new NotFoundException('Solicitação não encontrada.');
+    }
+
     const novoStatus = decidirDto.status;
 
     if (solicitacao.status === 'aprovada' || solicitacao.status === 'rejeitada') {
@@ -175,9 +238,7 @@ export class SolicitacoesService {
     }
 
     if (solicitacao.status === 'analise' && novoStatus === 'analise') {
-      throw new BadRequestException(
-        'A solicitação já está em análise.',
-      );
+      throw new BadRequestException('A solicitação já está em análise.');
     }
 
     if (solicitacao.status === 'analise' && novoStatus === 'aberta') {
@@ -192,7 +253,7 @@ export class SolicitacoesService {
           solicitacaoId: id,
           status: novoStatus,
           comentario: decidirDto.comentario,
-          responsavelDecisao: decidirDto.responsavelDecisao,
+          responsavelId: usuario.id,
         },
       });
 
@@ -203,9 +264,17 @@ export class SolicitacoesService {
         },
         include: {
           area: true,
+          solicitante: {
+            select: usuarioPublicoSelect,
+          },
           historicosDecisao: {
             orderBy: {
               dataDecisao: 'desc',
+            },
+            include: {
+              responsavel: {
+                select: usuarioPublicoSelect,
+              },
             },
           },
         },
@@ -213,8 +282,14 @@ export class SolicitacoesService {
     });
   }
 
-  async remover(id: string) {
-    await this.buscarPorId(id);
+  async remover(id: string, usuario: UsuarioAutenticado) {
+    const solicitacao = await this.buscarPorId(id, usuario);
+
+    if (usuario.perfil === Perfil.solicitante && solicitacao.status !== 'aberta') {
+      throw new BadRequestException(
+        'Apenas solicitações abertas podem ser excluídas pelo solicitante.',
+      );
+    }
 
     return this.prisma.solicitacao.update({
       where: { id },
@@ -224,4 +299,3 @@ export class SolicitacoesService {
     });
   }
 }
-

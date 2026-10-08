@@ -14,11 +14,6 @@ export class DecidirSolicitacaoDto {
   @IsNotEmpty({ message: 'O comentário da decisão é obrigatório.' })
   @MaxLength(1000, { message: 'O comentário deve ter no máximo 1000 caracteres.' })
   comentario!: string;
-
-  @ApiProperty({ description: 'Nome do responsável pela decisão', maxLength: 100 })
-  @IsString({ message: 'O responsável pela decisão deve ser informado.' })
-  @IsNotEmpty({ message: 'O responsável pela decisão é obrigatório.' })
-  @MaxLength(100, { message: 'O responsável pela decisão deve ter no máximo 100 caracteres.' })
-  responsavelDecisao!: string;
 }
+
 
