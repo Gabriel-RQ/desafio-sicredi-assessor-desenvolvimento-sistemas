@@ -10,6 +10,13 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Perfil {
+  solicitante
+  gestor
+
+  @@map("perfil")
+}
+
 enum Prioridade {
   baixa
   media
@@ -27,6 +34,21 @@ enum Status {
   @@map("status")
 }
 
+model Usuario {
+  id          String   @id @default(uuid()) @db.Uuid
+  nome        String
+  email       String   @unique
+  senhaHash   String   @map("senha_hash")
+  perfil      Perfil   @default(solicitante)
+  ativo       Boolean  @default(true)
+  dataCriacao DateTime @default(now()) @map("data_criacao")
+
+  solicitacoes Solicitacao[]
+  decisoes     HistoricoDecisao[]
+
+  @@map("usuario")
+}
+
 model Area {
   id           Int           @id @default(autoincrement())
   descricao    String
@@ -38,9 +60,9 @@ model Area {
 model Solicitacao {
   id                String     @id @default(uuid()) @db.Uuid
   areaSolicitanteId Int        @map("area_solicitante_id")
+  solicitanteId     String     @map("solicitante_id") @db.Uuid
   titulo            String
   descricao         String
-  solicitante       String
   prioridade        Prioridade
   status            Status     @default(aberta)
   dataSolicitacao   DateTime   @default(now()) @map("data_solicitacao")
@@ -48,25 +70,29 @@ model Solicitacao {
   dataExclusao      DateTime?  @map("data_exclusao")
 
   area              Area               @relation(fields: [areaSolicitanteId], references: [id], onDelete: Restrict)
+  solicitante       Usuario            @relation(fields: [solicitanteId], references: [id], onDelete: Restrict)
   historicosDecisao HistoricoDecisao[]
 
   @@index([status])
   @@index([prioridade])
   @@index([dataSolicitacao])
   @@index([areaSolicitanteId])
+  @@index([solicitanteId])
   @@map("solicitacao")
 }
 
 model HistoricoDecisao {
-  id                 Int      @id @default(autoincrement())
-  solicitacaoId      String   @map("solicitacao_id") @db.Uuid
-  status             Status
-  comentario         String?
-  responsavelDecisao String   @map("responsavel_decisao")
-  dataDecisao        DateTime @default(now()) @map("data_decisao")
+  id            Int      @id @default(autoincrement())
+  solicitacaoId String   @map("solicitacao_id") @db.Uuid
+  responsavelId String   @map("responsavel_id") @db.Uuid
+  status        Status
+  comentario    String?
+  dataDecisao   DateTime @default(now()) @map("data_decisao")
 
   solicitacao Solicitacao @relation(fields: [solicitacaoId], references: [id], onDelete: Cascade)
+  responsavel Usuario     @relation(fields: [responsavelId], references: [id], onDelete: Restrict)
 
   @@index([solicitacaoId])
+  @@index([responsavelId])
   @@map("historico_decisao")
 }
