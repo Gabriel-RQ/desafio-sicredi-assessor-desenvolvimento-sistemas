@@ -18,6 +18,7 @@
     "db:migrate": "npm run prisma:migrate --workspace=apps/api",
     "db:deploy": "npm run prisma:deploy --workspace=apps/api",
     "db:seed": "npm run prisma:seed --workspace=apps/api",
-    "podman:up": "podman compose up --build --detach"
+    "podman:up": "podman compose up --build --detach",
+    "podman:down": "podman compose down --volumes"
   }
 }
