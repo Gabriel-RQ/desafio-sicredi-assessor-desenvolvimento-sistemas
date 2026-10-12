@@ -86,6 +86,10 @@ A maneira mais rápida e consistente para avaliar a aplicação é utilizar o ar
      ```bash
      podman compose up --build -d
      ```
+     ou
+     ```bash
+     npm run podman:up
+     ```
    - Com **Docker Compose**:
      ```bash
      docker compose up --build -d
@@ -103,6 +107,20 @@ A maneira mais rápida e consistente para avaliar a aplicação é utilizar o ar
    - **Portal Web (Next.js):** [http://localhost:3001](http://localhost:3001)
    - **API REST (NestJS):** [http://localhost:3000/api/v1](http://localhost:3000/api/v1)
    - **Healthcheck da API:** [http://localhost:3000/api/v1/health](http://localhost:3000/api/v1/health)
+
+5. **Finalizar os containers**
+   - Com **Podman Compose**:
+     ```bash
+     podman compose down -v
+     ```
+     ou
+     ```bash
+     npm run podman:down
+     ```
+   - Com **Docker Compose**:
+     ```bash
+     docker compose down -v
+     ```
 
 ---
 
