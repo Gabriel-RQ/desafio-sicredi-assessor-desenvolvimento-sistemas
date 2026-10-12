@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,400;0,500;0,600;0,700;1,600&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+@import "tailwindcss";
+
+:root {
+  --font-exo: 'Exo 2', sans-serif;
+  --font-nunito: 'Nunito', sans-serif;
+  /* Paleta Primária Sicredi */
+  --sicredi-green-corp: #146E37;      /* Pantone 7733 C - Verde Institucional */
+  --sicredi-green-digital: #3FA110;   /* R63 G161 B16 - Verde Digital de Ação */
+  --sicredi-green-dark: #0F532A;      /* Verde Escuro para Hover/Active */
+  --sicredi-green-light: #EBF7E9;     /* Verde Claro Suave para Destaques */
+  
+  /* Superfícies & Neutros Sicredi */
+  --sicredi-bg: #F5F8F4;              /* Fundo Geral da Aplicação */
+  --sicredi-surface: #FFFFFF;         /* Superfície dos Cards e Modais */
+  --sicredi-border: #D7E6C8;          /* Neutro Claro Pantone 7485 C */
+  --sicredi-border-subtle: #E6EDE0;   /* Bordas internas e divisores */
+  --sicredi-text-main: #232B23;       /* Neutro Escuro - Alto Contraste */
+  --sicredi-text-muted: #5A645A;      /* Pantone 445 C - Textos Auxiliares */
+  --sicredi-text-subtle: #828E82;     /* Textos Desabilitados/Placeholders */
+
+  /* Semântica Institucional de Status */
+  --status-aberta-bg: #FFF9E6;
+  --status-aberta-border: #FCE8A6;
+  --status-aberta-text: #8C6400;
+  --status-aberta-dot: #FFCD00;
+
+  --status-analise-bg: #EBF4FC;
+  --status-analise-border: #CFE4FA;
+  --status-analise-text: #0F5796;
+  --status-analise-dot: #1E78D4;
+
+  --status-aprovada-bg: #EAF6EC;
+  --status-aprovada-border: #C8E6CE;
+  --status-aprovada-text: #116834;
+  --status-aprovada-dot: #146E37;
+
+  --status-rejeitada-bg: #FDF0F2;
+  --status-rejeitada-border: #F8D0D6;
+  --status-rejeitada-text: #940C2C;
+  --status-rejeitada-dot: #C0392B;
+}
+
+@theme {
+  --color-corp: var(--sicredi-green-corp);
+  --color-digital: var(--sicredi-green-digital);
+  --color-dark: var(--sicredi-green-dark);
+  --color-light: var(--sicredi-green-light);
+
+  --color-surface: var(--sicredi-surface);
+  --color-page-bg: var(--sicredi-bg);
+  --color-border-main: var(--sicredi-border);
+  --color-border-subtle: var(--sicredi-border-subtle);
+
+  --color-text-main: var(--sicredi-text-main);
+  --color-text-muted: var(--sicredi-text-muted);
+  --color-text-subtle: var(--sicredi-text-subtle);
+
+  --font-heading: var(--font-exo), sans-serif;
+  --font-sans: var(--font-nunito), sans-serif;
+}
+
+body {
+  background-color: var(--sicredi-bg);
+  color: var(--sicredi-text-main);
+  font-family: var(--font-nunito), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-exo), sans-serif;
+}
