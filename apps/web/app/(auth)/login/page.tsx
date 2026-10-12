@@ -70,16 +70,14 @@ export default function LoginPage()
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center mb-6">
-          <div className="bg-white p-3.5 rounded-2xl shadow-sm border border-[#D7E6C8] flex items-center justify-center">
-            <Image
-              src="/sicredi_logo.svg"
-              alt="Sicredi"
-              width={160}
-              height={40}
-              style={{ width: 'auto', height: 'auto' }}
-              priority
-            />
-          </div>
+          <Image
+            src="/sicredi_logo.svg"
+            alt="Sicredi"
+            width={160}
+            height={40}
+            style={{ width: 'auto', height: 'auto' }}
+            priority
+          />
         </div>
         <h1 className="text-center text-2xl font-bold tracking-tight text-[#232B23] font-heading">
           Gestão de Solicitações Internas
@@ -226,6 +224,6 @@ export default function LoginPage()
           Sicredi • 2026
         </p>
       </div>
-    </div>
+    </div >
   );
 }
