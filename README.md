@@ -41,7 +41,51 @@ Utilizei esse projeto como oportunidade de aprender mais sobre IA e desenvolvime
 
 ---
 
-## 3. Credenciais de Acesso para Avaliação (Seed)
+## 3. Demonstração Visual da Aplicação (Showcases)
+
+Abaixo estão apresentados os *showcases* visuais das principais interfaces do sistema, concebidos com a identidade corporativa do Sicredi, moldura de navegador padronizada e telas reais da aplicação:
+
+### 3.1 Painel Principal (Dashboard)
+Visão consolidada com indicadores executivos de volume e prioridade, filtros avançados e listagem dinâmica de demandas:
+
+<div align="center">
+  <img src="docs/showcases/dashboard_showcase.jpg" alt="Dashboard — Painel de Solicitações Internas" width="100%" />
+</div>
+
+### 3.2 Detalhes da Solicitação e Histórico de Pareceres
+Fluxo de deliberação para o perfil Gestor, apresentando informações da demanda, histórico cronológico de pareceres em formato de *Timeline* auditável e encerramento de ciclo:
+
+<div align="center">
+  <img src="docs/showcases/detalhes_solicitacao_showcase.jpg" alt="Detalhes da solicitação — Histórico e Pareceres" width="100%" />
+</div>
+
+### 3.3 Abertura de Demanda (Nova Solicitação)
+Formulário de submissão com seleção dinâmica de área solicitante, nível de prioridade e validações em tempo real:
+
+<div align="center">
+  <img src="docs/showcases/nova_solicitacao_showcase.jpg" alt="Nova solicitação — Formulário de Abertura" width="100%" />
+</div>
+
+### 3.4 Portal de Autenticação Corporativa
+Tela de login seguro com atalhos de demonstração para os perfis Gestor e Solicitante:
+
+<div align="center">
+  <img src="docs/showcases/autenticacao_showcase.jpg" alt="Autenticação — Portal Corporativo" width="100%" />
+</div>
+
+<details>
+<summary>📂 <b>Capturas brutas de tela adicionais (disponíveis em <code>docs/previews/</code>)</b></summary>
+
+- [`docs/previews/dashboard_page_preview.png`](docs/previews/dashboard_page_preview.png)
+- [`docs/previews/solicitacao_page_preview.png`](docs/previews/solicitacao_page_preview.png)
+- [`docs/previews/nova_solicitacao_page_preview.png`](docs/previews/nova_solicitacao_page_preview.png)
+- [`docs/previews/login_page_preview.png`](docs/previews/login_page_preview.png)
+
+</details>
+
+---
+
+## 4. Credenciais de Acesso para Avaliação (Seed)
 
 O banco de dados é inicializado automaticamente com usuários pré-cadastrados para validação imediata dos perfis de controle de acesso (RBAC):
 
@@ -53,25 +97,25 @@ O banco de dados é inicializado automaticamente com usuários pré-cadastrados 
 
 ---
 
-## 4. Matriz de Conformidade com o Edital
+## 5. Matriz de Conformidade com o Edital
 
 A solução contempla 100% dos requisitos obrigatórios e diferenciais técnicos previstos no edital:
 
-| Requisito do Edital | Descrição da Implementação |
-| :--- | :---: |
-| **§ 4.1 Cadastro de Solicitações** | Formulário com validação em tempo real (Zod/React Hook Form) contendo: Título, Descrição, Solicitante, Área Solicitante (select dinâmico via API), Prioridade (Baixa, Média, Alta), Data da solicitação e Status inicial definido como Aberta. |
+| Requisito do Edital | Descrição da Implementação | Status |
+| :--- | :--- | :---: |
+| **§ 4.1 Cadastro de Solicitações** | Formulário com validação em tempo real (Zod/React Hook Form) contendo: Título, Descrição, Solicitante, Área Solicitante (select dinâmico via API), Prioridade (Baixa, Média, Alta), Data da solicitação e Status inicial definido como Aberta. | **Concluído** |
 | **§ 4.2 Consulta de Solicitações** | Tabela rica com paginação assíncrona, busca textual por termo (título/descrição), filtros combinados por Status e Prioridade, e ordenação dinâmica por data de solicitação ou atualização. | **Concluído** |
-| **§ 4.3 Análise e Decisão** | Fluxo restrito ao perfil de Gestor: transição atômica de status para Aprovada ou Rejeitada com justificativa/comentário obrigatório, registro de data/hora e *timeline* cronológica auditável de eventos. |
-| **§ 4.4 Dashboard de Indicadores** | Painel analítico exibindo métricas consolidadas: Total de solicitações, Abertas, Aprovadas, Rejeitadas e distribuição gráfica/percentual detalhada por Prioridade (Baixa, Média e Alta). |
-| **§ 5 API RESTful & Códigos HTTP** | Arquitetura REST completa com endpoints (`/api/v1/solicitacoes`, `/decidir`, `/dashboard`, `/areas`, `/auth`), verbos adequados (GET, POST, PATCH, DELETE), DTOs tipados e conformidade RFC 7807. |
-| **§ 6 Persistência Relacional** | Modelagem relacional no PostgreSQL 16 com chaves estrangeiras, índices B-Tree compostos para busca/status/data, *soft delete* (`dataExclusao`) e migrações idempotentes do Prisma. |
-| **§ 10 Diferenciais Técnicos** | Orquestração com Docker/Podman Compose; 99 testes automatizados (unitários e de integração); autenticação JWT com RBAC; rate limiting; logs estruturados com contexto; padronização de commits semânticos em português. |
+| **§ 4.3 Análise e Decisão** | Fluxo restrito ao perfil de Gestor: transição atômica de status para Aprovada ou Rejeitada com justificativa/comentário obrigatório, registro de data/hora e *timeline* cronológica auditável de eventos. | **Concluído** |
+| **§ 4.4 Dashboard de Indicadores** | Painel analítico exibindo métricas consolidadas: Total de solicitações, Abertas, Aprovadas, Rejeitadas e distribuição gráfica/percentual detalhada por Prioridade (Baixa, Média e Alta). | **Concluído** |
+| **§ 5 API RESTful & Códigos HTTP** | Arquitetura REST completa com endpoints (`/api/v1/solicitacoes`, `/decidir`, `/dashboard`, `/areas`, `/auth`), verbos adequados (GET, POST, PATCH, DELETE), DTOs tipados e conformidade RFC 7807. | **Concluído** |
+| **§ 6 Persistência Relacional** | Modelagem relacional no PostgreSQL 16 com chaves estrangeiras, índices B-Tree compostos para busca/status/data, *soft delete* (`dataExclusao`) e migrações idempotentes do Prisma. | **Concluído** |
+| **§ 10 Diferenciais Técnicos** | Orquestração com Docker/Podman Compose; 99 testes automatizados (unitários e de integração); autenticação JWT com RBAC; rate limiting; logs estruturados com contexto; padronização de commits semânticos em português. | **Concluído** |
 
 ---
 
-## 5. Guia de Execução Rápida
+## 6. Guia de Execução Rápida
 
-### 5.1 Execução via Docker / Podman Compose (Recomendada)
+### 6.1 Execução via Docker / Podman Compose (Recomendada)
 
 A maneira mais rápida e consistente para avaliar a aplicação é utilizar o arquivo `compose.yml` que orquestra o banco PostgreSQL, a API NestJS e o portal Next.js com *healthchecks* encadeados.
 
@@ -124,7 +168,7 @@ A maneira mais rápida e consistente para avaliar a aplicação é utilizar o ar
 
 ---
 
-### 5.2 Execução em Modo de Desenvolvimento Local
+### 6.2 Execução em Modo de Desenvolvimento Local
 
 Caso deseje executar os serviços diretamente na máquina host:
 
@@ -176,17 +220,17 @@ Caso deseje executar os serviços diretamente na máquina host:
 
 ---
 
-## 6. Guia de Testes Automatizados e Qualidade
+## 7. Guia de Testes Automatizados e Qualidade
 
 O projeto conta com uma cobertura rigorosa de testes unitários e de integração implementados com **Vitest** e **Testing Library**, totalizando **99 testes automatizados** (36 testes no backend e 63 testes no frontend), sem mocks artificiais e cobrindo cenários positivos e negativos.
 
-### 6.1 Executar Todos os Testes do Monorepo
+### 7.1 Executar Todos os Testes do Monorepo
 Para disparar a suíte completa de testes de todos os workspaces em sequência:
 ```bash
 npm test
 ```
 
-### 6.2 Executar Testes Específicos por Workspace
+### 7.2 Executar Testes Específicos por Workspace
 - **Testes da API NestJS (36 testes):**
   ```bash
   npm run test:api
@@ -196,7 +240,7 @@ npm test
   npm run test:web
   ```
 
-### 6.3 Relatórios de Cobertura de Código
+### 7.3 Relatórios de Cobertura de Código
 - **Cobertura da API:**
   ```bash
   npm run test:cov:api
@@ -206,7 +250,7 @@ npm test
   npm run test:cov:web
   ```
 
-### 6.4 Validação de Compilação Geral (*Typecheck & Build*)
+### 7.4 Validação de Compilação Geral (*Typecheck & Build*)
 Para certificar que todo o código TypeScript compila estritamente sem erros em todos os 3 workspaces:
 ```bash
 npm run build
@@ -214,7 +258,7 @@ npm run build
 
 ---
 
-## 7. Premissas Adotadas e Limitações Técnicas
+## 8. Premissas Adotadas e Limitações Técnicas
 
 ### Premissas Adotadas
 1. **Controle de Exclusão por *Soft Delete*:** A exclusão de solicitações preenche o atributo `dataExclusao` em conformidade com políticas corporativas de governança e auditoria, preservando a integridade histórica de deliberações/pareceres e rastreabilidade.
@@ -228,7 +272,7 @@ npm run build
 
 ---
 
-## 8. Considerações Arquiteturais (Edital — Seção 8.2)
+## 9. Considerações Arquiteturais (Edital — Seção 8.2)
 
 ### 8.2.1 Evolução da Solução
 
@@ -291,7 +335,7 @@ A integração após a aprovação de uma solicitação seria desenhada sob o pa
 
 ---
 
-## 9. Estrutura do Repositório (Monorepo Layout)
+## 10. Estrutura do Repositório (Monorepo Layout)
 
 ```text
 desafio-sicredi-assessor-desenvolvimento-sistemas/
@@ -317,6 +361,11 @@ desafio-sicredi-assessor-desenvolvimento-sistemas/
 │       ├── Dockerfile                 # Multi-stage build do portal web
 │       └── package.json
 │
+├── docs/
+│   ├── assets/                        # Banner decorativo institucional
+│   ├── previews/                      # Capturas de tela brutas das páginas
+│   └── showcases/                     # Slides de apresentação e showcases visuais
+│
 ├── packages/
 │   └── shared/                        # Pacote compartilhado TypeScript (@sicredi/shared)
 │       ├── src/index.ts               # Interfaces, DTOs e enums (Status, Prioridade, Perfil)
@@ -330,7 +379,7 @@ desafio-sicredi-assessor-desenvolvimento-sistemas/
 
 ---
 
-## 10. Considerações Finais
+## 11. Considerações Finais
 
 O projeto foi construído respeitando as melhores práticas da engenharia de software, combinando segurança nativa, rigor de tipagem estrita de ponta a ponta, fidelidade visual à marca Sicredi e uma fundamentação arquitetural sólida para crescimento sustentável e integração corporativa.
 
