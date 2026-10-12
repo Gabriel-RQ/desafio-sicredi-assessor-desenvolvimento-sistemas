@@ -18,8 +18,8 @@ out/
 .env.*
 .env.local
 .env.*.local
-!.env.example
-!.env.*.example
+!**/.env.example
+!**/.env.*.example
 
 # Testes e cobertura
 coverage/
@@ -50,3 +50,6 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Orquestração e Agentes
+.agents/

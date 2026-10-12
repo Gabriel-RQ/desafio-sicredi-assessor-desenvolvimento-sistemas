@@ -2,12 +2,19 @@
   "name": "desafio-sicredi-assessor-desenvolvimento-sistemas",
   "private": true,
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "dev:api": "npm run start:dev --workspace=apps/api",
     "dev:web": "npm run dev --workspace=apps/web",
     "build": "npm run build --workspaces",
+    "test": "npm run test:api && npm run test:web",
+    "test:api": "npm run test --workspace=apps/api",
+    "test:web": "npm run test --workspace=apps/web",
+    "test:cov:api": "npm run test:cov --workspace=apps/api",
+    "test:cov:web": "npm run test:cov --workspace=apps/web",
+    "test:e2e": "npm run test:e2e --workspace=apps/api",
     "db:migrate": "npm run prisma:migrate --workspace=apps/api",
     "db:seed": "npm run prisma:seed --workspace=apps/api",
     "podman:up": "podman compose up --build --detach"
