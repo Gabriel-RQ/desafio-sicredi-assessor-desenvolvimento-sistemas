@@ -77,7 +77,7 @@ A maneira mais rápida e consistente para avaliar a aplicação é utilizar o ar
 
 1. **Clonar o repositório e entrar no diretório raiz:**
    ```bash
-   git clone <URL_DO_REPOSITORIO>
+   git clone https://github.com/Gabriel-RQ/desafio-sicredi-assessor-desenvolvimento-sistemas.git
    cd desafio-sicredi-assessor-desenvolvimento-sistemas
    ```
 
