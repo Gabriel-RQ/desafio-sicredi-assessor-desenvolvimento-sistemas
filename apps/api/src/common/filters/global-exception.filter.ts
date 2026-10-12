@@ -68,12 +68,45 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       this.logger.error('Erro desconhecido capturado:', exception);
     }
 
+    const detail = Array.isArray(message)
+      ? message.join('; ')
+      : typeof message === 'string'
+        ? message
+        : String(message);
+
+    const type = this.resolveTypeUri(error);
+    const requestUrl = request.originalUrl || request.url;
+
     response.status(status).json({
+      // RFC 7807 Problem Details
+      type,
+      title: error,
+      status,
+      detail,
+      instance: requestUrl,
+
+      // Retrocompatibilidade total com clientes e testes existentes
       statusCode: status,
       error,
       message,
-      path: request.url,
+      path: requestUrl,
       timestamp: new Date().toISOString(),
     });
+  }
+
+  /**
+   * Resolve a URI de tipo canônica da RFC 7807 para a taxonomia de erros do Sicredi.
+   */
+  private resolveTypeUri(errorTitle: string): string {
+    const slug = errorTitle
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+
+    return slug
+      ? `https://developer.sicredi.com.br/errors/${slug}`
+      : 'about:blank';
   }
 }

@@ -209,6 +209,42 @@ describe('SolicitacoesService', () => {
       ).rejects.toThrow(BadRequestException);
     });
 
+    it('deve lançar BadRequestException se a solicitação já estiver em análise e tentar mover para análise novamente', async () => {
+      prismaMock.solicitacao.findFirst.mockResolvedValue({
+        id: 'uuid-1',
+        status: Status.analise,
+      });
+
+      await expect(
+        service.decidir(
+          'uuid-1',
+          {
+            status: Status.analise,
+            comentario: 'Tentativa redundante de colocar em análise',
+          },
+          usuarioGestor,
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('deve lançar BadRequestException se tentar retroceder solicitação em análise para aberta', async () => {
+      prismaMock.solicitacao.findFirst.mockResolvedValue({
+        id: 'uuid-1',
+        status: Status.analise,
+      });
+
+      await expect(
+        service.decidir(
+          'uuid-1',
+          {
+            status: Status.aberta,
+            comentario: 'Tentativa inválida de reabrir demanda',
+          },
+          usuarioGestor,
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
+
     it('deve atualizar o status e salvar o histórico com o ID do gestor autenticado', async () => {
       prismaMock.solicitacao.findFirst.mockResolvedValue({
         id: 'uuid-1',

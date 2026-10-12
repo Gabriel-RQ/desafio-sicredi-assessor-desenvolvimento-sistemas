@@ -20,7 +20,10 @@ describe('GlobalExceptionFilter', () => {
     mockJson = vi.fn();
     mockStatus = vi.fn().mockImplementation(() => ({ json: mockJson }));
     mockGetResponse = vi.fn().mockReturnValue({ status: mockStatus });
-    mockGetRequest = vi.fn().mockReturnValue({ url: '/api/v1/teste' });
+    mockGetRequest = vi.fn().mockReturnValue({
+      url: '/api/v1/teste',
+      originalUrl: '/api/v1/teste',
+    });
 
     mockArgumentsHost = {
       switchToHttp: () => ({
@@ -38,6 +41,11 @@ describe('GlobalExceptionFilter', () => {
     expect(mockStatus).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
     expect(mockJson).toHaveBeenCalledWith(
       expect.objectContaining({
+        type: 'https://developer.sicredi.com.br/errors/not-found',
+        title: 'Not Found',
+        status: HttpStatus.NOT_FOUND,
+        detail: 'Recurso não encontrado',
+        instance: '/api/v1/teste',
         statusCode: HttpStatus.NOT_FOUND,
         error: 'Not Found',
         message: 'Recurso não encontrado',
@@ -59,6 +67,11 @@ describe('GlobalExceptionFilter', () => {
     expect(mockStatus).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
     expect(mockJson).toHaveBeenCalledWith(
       expect.objectContaining({
+        type: 'https://developer.sicredi.com.br/errors/bad-request',
+        title: 'Bad Request',
+        status: HttpStatus.BAD_REQUEST,
+        detail: 'O título é obrigatório; A descrição é obrigatória',
+        instance: '/api/v1/teste',
         statusCode: HttpStatus.BAD_REQUEST,
         error: 'Bad Request',
         message: validationErrors,
@@ -82,6 +95,11 @@ describe('GlobalExceptionFilter', () => {
     expect(mockStatus).toHaveBeenCalledWith(HttpStatus.CONFLICT);
     expect(mockJson).toHaveBeenCalledWith(
       expect.objectContaining({
+        type: 'https://developer.sicredi.com.br/errors/conflict',
+        title: 'Conflict',
+        status: HttpStatus.CONFLICT,
+        detail: 'Violação de unicidade no(s) campo(s): titulo.',
+        instance: '/api/v1/teste',
         statusCode: HttpStatus.CONFLICT,
         error: 'Conflict',
         message: 'Violação de unicidade no(s) campo(s): titulo.',
@@ -98,6 +116,11 @@ describe('GlobalExceptionFilter', () => {
     expect(mockStatus).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
     expect(mockJson).toHaveBeenCalledWith(
       expect.objectContaining({
+        type: 'https://developer.sicredi.com.br/errors/internal-server-error',
+        title: 'Internal Server Error',
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        detail: 'Ocorreu um erro interno no servidor.',
+        instance: '/api/v1/teste',
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         error: 'Internal Server Error',
         message: 'Ocorreu um erro interno no servidor.',
