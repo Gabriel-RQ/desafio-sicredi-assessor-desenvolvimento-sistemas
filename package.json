@@ -16,6 +16,7 @@
     "test:cov:web": "npm run test:cov --workspace=apps/web",
     "test:e2e": "npm run test:e2e --workspace=apps/api",
     "db:migrate": "npm run prisma:migrate --workspace=apps/api",
+    "db:deploy": "npm run prisma:deploy --workspace=apps/api",
     "db:seed": "npm run prisma:seed --workspace=apps/api",
     "podman:up": "podman compose up --build --detach"
   }

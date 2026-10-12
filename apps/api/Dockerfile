@@ -62,6 +62,10 @@ COPY --chown=node:node --from=builder /app/packages/shared ./packages/shared
 COPY --chown=node:node --from=builder /app/apps/api/package.json ./apps/api/package.json
 COPY --chown=node:node --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --chown=node:node --from=builder /app/apps/api/prisma ./apps/api/prisma
+COPY --chown=node:node --from=builder /app/apps/api/prisma7.config.ts ./apps/api/prisma7.config.ts
+COPY --chown=node:node apps/api/docker-entrypoint.sh ./apps/api/docker-entrypoint.sh
+
+RUN chmod +x ./apps/api/docker-entrypoint.sh
 
 # Definir diretório de trabalho no workspace da API
 WORKDIR /app/apps/api
@@ -76,5 +80,6 @@ EXPOSE 3000
 HEALTHCHECK --interval=10s --timeout=5s --start-period=15s --retries=5 \
   CMD curl -f http://localhost:3000/api/v1/health || exit 1
 
-# Comando de inicialização em produção
+# Script de entrada para automação de migrations/seed e inicialização do NestJS
+ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["node", "dist/src/main.js"]
