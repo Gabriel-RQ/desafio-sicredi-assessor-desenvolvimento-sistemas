@@ -73,16 +73,6 @@ Tela de login seguro com atalhos de demonstração para os perfis Gestor e Solic
   <img src="docs/showcases/autenticacao_showcase.jpg" alt="Autenticação — Portal Corporativo" width="100%" />
 </div>
 
-<details>
-<summary>📂 <b>Capturas brutas de tela adicionais (disponíveis em <code>docs/previews/</code>)</b></summary>
-
-- [`docs/previews/dashboard_page_preview.png`](docs/previews/dashboard_page_preview.png)
-- [`docs/previews/solicitacao_page_preview.png`](docs/previews/solicitacao_page_preview.png)
-- [`docs/previews/nova_solicitacao_page_preview.png`](docs/previews/nova_solicitacao_page_preview.png)
-- [`docs/previews/login_page_preview.png`](docs/previews/login_page_preview.png)
-
-</details>
-
 ---
 
 ## 4. Credenciais de Acesso para Avaliação (Seed)
